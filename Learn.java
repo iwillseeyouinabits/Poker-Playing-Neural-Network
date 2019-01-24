@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class Learn {
 
@@ -151,6 +152,75 @@ public class Learn {
 		return allW;
 	}
 
+	public double[][][][] learnRecurGPU(double[][][] w, int it, int batch, double stop, int num, double[][][] testData)
+			throws IOException {
+		boolean run = true;
+		int count = 0;
+		double[][][][] allW = new double[num][][][];
+		for (int x = 0; x < num; x++) {
+			int subcount = 0;
+			loop: while (count < it) {
+				System.out.println((errornum / errorden) + "     " + x + "  !!!!!!!!!!!!!");
+				// System.out.println(" ");
+				double[][] data = testData(testData);
+				final double[][][][] batchW = new double[batch][][][];
+				IntStream.range(0, batch).parallel().forEach(i -> {
+					batchW[i] = learn(w, data[0], data[1]);
+				});
+				for (int j = 0; j < w.length; j++) {
+					for (int n = 0; n < w[j].length; n++) {
+						for (int m = 0; m < w[j][n].length; m++) {
+							double val = 0;
+							for (int k = 0; k < batch; k++) {
+								val += batchW[k][j][n][m];
+							}
+							w[j][n][m] = val/batch;
+						}
+					}
+				}
+				if (errornum / errorden <= stop && subcount >= 300) {
+					errornum = 0;
+					errorden = 0;
+					run = false;
+					break loop;
+				}
+				if (count == it - 1) {
+					run = false;
+					System.out.println("fired");
+				}
+				if (count % 10000 == 0) {
+					System.out.println("hi there");
+					if (prog < errornum / errorden) {
+						prog = 100;
+						run = true;
+						errornum = 0;
+						errorden = 0;
+						good = false;
+						x--;
+						break loop;
+					} else {
+						good = true;
+						prog = errornum / errorden;
+						subcount = 0;
+						errornum = 0;
+						errorden = 0;
+					}
+				}
+				subcount++;
+				count++;
+			}
+			if (run) {
+				return learnRecur(randW(), it, stop, num, testData);
+			}
+
+			if (good) {
+				allW[x] = w;
+				weightsToFile(w, x);
+			}
+		}
+		return allW;
+	}
+
 	/**
 	 * picks a singular set of inputs and their outputs from a data set
 	 * 
@@ -163,9 +233,9 @@ public class Learn {
 
 	}
 
-	
 	/**
 	 * calculates of derivative of the squashing function of the neuron at a value x
+	 * 
 	 * @param x - the x position to find the derivative of.
 	 * @return
 	 */
@@ -173,9 +243,9 @@ public class Learn {
 		return (Math.pow(Math.E, x)) / Math.pow(1.0 + Math.pow(Math.E, x), 2);
 	}
 
-	
 	/**
 	 * gets a file and outputs the weights that are stored in the file
+	 * 
 	 * @param file - the file that this program stored weights in
 	 * @return - the weights of that file
 	 */
@@ -214,37 +284,38 @@ public class Learn {
 
 		return w;
 	}
-	
+
 	public void weightsToFile(double[][][] w, int x) throws IOException {
-			BufferedWriter bw = new BufferedWriter(new FileWriter("weights V" + Integer.toString(x) + ".txt"));
-			double[][][] matrix = w;
-			for (int i = 0; i < matrix.length; i++) {
-				for (int j = 0; j < matrix[i].length; j++) {
-					for (int z = 0; z < matrix[i][j].length; z++) {
-						if (z != matrix[i][j].length - 1) {
-							bw.write(Double.toString(matrix[i][j][z]));
-							bw.newLine();
-						} else {
-							bw.write(Double.toString(matrix[i][j][z]));
-							bw.newLine();
-						}
-					}
-					if (j != weights[i].length - 1) {
-						bw.write("*");
+		BufferedWriter bw = new BufferedWriter(new FileWriter("weights V" + Integer.toString(x) + ".txt"));
+		double[][][] matrix = w;
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[i].length; j++) {
+				for (int z = 0; z < matrix[i][j].length; z++) {
+					if (z != matrix[i][j].length - 1) {
+						bw.write(Double.toString(matrix[i][j][z]));
+						bw.newLine();
+					} else {
+						bw.write(Double.toString(matrix[i][j][z]));
 						bw.newLine();
 					}
 				}
-				if (i != weights.length - 1) {
-					bw.write("?");
+				if (j != weights[i].length - 1) {
+					bw.write("*");
 					bw.newLine();
 				}
 			}
+			if (i != weights.length - 1) {
+				bw.write("?");
+				bw.newLine();
+			}
+		}
 
-			bw.close();
+		bw.close();
 	}
 
 	/**
 	 * Creates a random set of weights
+	 * 
 	 * @return - a random set of weights
 	 */
 	public double[][][] randW() {
