@@ -1,6 +1,6 @@
 # Java Neural Network
 
-Java Neural Network for people to understand how gradient decent in a neural network is calculated and for people to use in AI and Machine Learning projects.
+Java Neural Network is for people to understand how gradient decent in a neural network is calculated and for people to use in AI and Machine Learning projects.
 
 ## How To Use This Code
 
