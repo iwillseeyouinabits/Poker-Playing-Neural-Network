@@ -36,6 +36,23 @@ public class NeuralNetwork {
 		layers = new Layer[size];
 		buildNetwork();
 	}
+	
+	/**
+	 * 
+	 *creates random weighted neural network
+	 *
+	 * @param numInput - the number of inputs to the neural network
+	 * @param numNeuronsInLayer - the number of neurons in each layer other than the output layer of a neural network
+	 * @param numNeuronsInOutput - the number of neurons in the output layer of a neural network
+	 * @param numLayers - the number of layers in the random weights of the neural network
+	 */
+	public NeuralNetwork(int numInput, int numNeuronsInLayer, int numNeuronsInOutput, int numLayers, double[] inputs){
+		this.weights =  randomWeights(numInput, numNeuronsInLayer, numNeuronsInOutput, numLayers);
+		this.inputs = inputs;
+		size = this.weights.length;
+		layers = new Layer[size];
+		buildNetwork();
+	}
 
 	/**
 	 * constructs a network build of layers
@@ -115,7 +132,36 @@ public class NeuralNetwork {
 		}
 	}
 
-	
+	/**
+	 *creates random weights to a neural network
+	 *
+	 * @param numInput - the number of inputs to the neural network
+	 * @param numNeuronsInLayer - the number of neurons in each layer other than the output layer of a neural network
+	 * @param numNeuronsInOutput - the number of neurons in the output layer of a neural network
+	 * @param numLayers - the number of layers in the random weights of the neural network
+	 * @return - random weights of a neural network
+	 */
+	public double[][][] randomWeights(int numInput, int numNeuronsInLayer, int numNeuronsInOutput, int numLayers) {
+		double[][][] randW = new double[numLayers][][];
+		for (int i = 0; i < numLayers; i++) {
+			if (i < numLayers - 1) {
+				randW[i] = new double[numNeuronsInLayer][];
+			} else {
+				randW[i] = new double[numNeuronsInOutput][];
+			}
+			for (int x = 0; x < randW[i].length; x++) {
+				if (i == 0) {
+					randW[i][x] = new double[numInput];
+				} else {
+					randW[i][x] = new double[randW[i-1].length];
+				}
+				for(int y = 0; y < randW[i][x].length; y++) {
+					randW[i][x][y] = 2*(Math.random()-.5);
+				}
+			}
+		}
+		return randW;
+	}
 
 	
 	/**
