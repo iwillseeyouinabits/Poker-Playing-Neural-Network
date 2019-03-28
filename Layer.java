@@ -40,19 +40,36 @@ public class Layer {
 		return outputs;
 	}
 	
-
+	 /**
+	 * Returns an array of the inputs to this layer
+	 * @return - an array of the inputs to this layer
+	 */
 	public double[] getInputs() {
 		return inputs;
 	}
 
+	
+	 /**
+	 * Returns an array of weights of each neuron in this layer
+	 * @return - an array of weights of each neuron in this layer
+	 */
 	public double[][] getWeights() {
 		return weights;
 	}
-
+	
+	 /**
+	 * Returns the number of neurons in this layer of the neural network
+	 * @return - the number of neurons in this layer of the neural network
+	 */
 	public int getSize() {
 		return size;
 	}
 
+	
+	 /**
+	 * Returns the neurons in this layer of the neural network
+	 * @return - the neurons in this layer of the neural network
+	 */
 	public Neuron[] getNeurons() {
 		return neurons;
 	}
