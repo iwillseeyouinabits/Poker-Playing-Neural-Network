@@ -16,62 +16,78 @@ The computer running this code must already be running java and must jave the ab
 
 This code should be put in a text editor or IDE and added to a java file with a main method to run the code.
 
-an example main method may be
+an example main method may be to train a neural network to approximate the Math.cos() method in java
+
+```java
+import java.io.IOException;
+
+public class Main {
+	public static void main(String args[]) throws IOException, InterruptedException {
+		double[][][] randomWeights = new NeuralNetwork(1, 5, 1, 2, new double[1]).getWeights();
+		// define a Learn object with a learning rate of .1
+		Learn learn = new Learn(randomWeights, 0.1);
+		// training a set of 5 random weights of 5 neural network for either 10000000
+		// iterations or until it achieves a 0.7% error rate on a data set provided by the
+		// getDataOfCosFunction method
+		learn.learnRecur(randomWeights, 1000000, .007, 5, getDataOfCosFunction(100));
+		System.out.println();
+		System.out.println("What do our 5 neural networks approximate the value of Math.cos(0.65)?");
+		System.out.println("--> " + ((new NeuralNetwork("weights V0.txt", new double[] { 0.5 }).fire()[0]
+				+ new NeuralNetwork("weights V1.txt", new double[] { 0.65 }).fire()[0]
+				+ new NeuralNetwork("weights V2.txt", new double[] { 0.65 }).fire()[0]
+				+ new NeuralNetwork("weights V3.txt", new double[] { 0.65 }).fire()[0]
+				+ new NeuralNetwork("weights V4.txt", new double[] { 0.65 }).fire()[0]) / 5));
+		System.out.println("What is the actual value of Math.cos(0.65)?");
+		System.out.println("--> " + Math.cos(0.65));
+	}
+
+	/**
+	 * gets numInput amount of inputs of a random number from 0 to 1 and the output
+	 * of the Math.cos() of that number
+	 * 
+	 * @param numInputs
+	 * @return - the data of the Math.cos() of a bunch of random numbers between 0
+	 *         and 1
+	 */
+	public static double[][][] getDataOfCosFunction(int numInputs) {
+		double[][][] data = new double[numInputs][2][];
+		for (int i = 0; i < numInputs; i++) {
+			double[] inputs = new double[] { Math.random() };
+			double[] correctOutputs = new double[] { Math.cos(inputs[0]) };
+			data[i][0] = inputs;
+			data[i][1] = correctOutputs;
+		}
+		return data;
+	}
+
+}
+
+```
 
 
+when running this test I was able to achieve the output to the console of:
 
+```
+
+What do our 5 neural networks approximate the value of Math.cos(0.65)?
+--> 0.8134524119730848
+What is the actual value of Math.cos(0.65)?
+--> 0.7960837985490559
+
+```
 
 
 ## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+ 
+ You can run this test by downloading all of the files in this project and coppying the above code into your main java file.
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+This neural network can only output data in the range from 0 to 1 so all data should be normalized to that range for best results. This neural network is free to use with no legal restrictions.
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Isaac Singer**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/iwillseeyouinabits/neural-network/graphs/contributors) who participated in this project.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
