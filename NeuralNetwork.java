@@ -60,18 +60,40 @@ public class NeuralNetwork {
 		return outputs;
 	}
 
+	/**
+	 * gets the weights of each neuron in each layer of the neural network
+	 * 
+	 * @return - the weights of each neuron in each layer of the neural network
+	 */
 	public double[][][] getWeights() {
 		return weights;
 	}
 
+	
+	/**
+	 * gets the inputed values to the neural network
+	 * 
+	 * @return - the inputed values to the neural network
+	 */
 	public double[] getInputs() {
 		return inputs;
 	}
-
+	
+	/**
+	 * gets the numbber of layers in the neural network
+	 * 
+	 * @return - the numbber of layers in the neural network
+	 */
 	public int getSize() {
 		return size;
 	}
 
+	
+	/**
+	 * gets the layers of the neural network
+	 * 
+	 * @return - gets the layers of the neural network
+	 */
 	public Layer[] getLayers() {
 		return layers;
 	}
@@ -94,6 +116,13 @@ public class NeuralNetwork {
 	}
 
 	
+
+	
+	/**
+	 * takes a text file storing weights of a neural network in it and returns the neural networks weights
+	 * 
+	 * @return -  the neural networks weights that were stored in a file
+	 */
 	public double[][][] fileToWeights(String file) throws FileNotFoundException{
 		double[][][] w;
 		ArrayList<ArrayList<ArrayList<Double>>> tempW = new ArrayList<ArrayList<ArrayList<Double>>>();
