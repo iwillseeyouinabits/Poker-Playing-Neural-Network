@@ -10,7 +10,7 @@ The key methods to use for a trained neural network are the fire method of the N
 
 ### Prerequisites
 
-The computer running this code must already be running java and must jave the abuility to compile java code in an IDE or text editor
+The computer running this code must already be running java and must have the abuility to compile java code in an IDE or text editor.
 
 ### Installing
 
