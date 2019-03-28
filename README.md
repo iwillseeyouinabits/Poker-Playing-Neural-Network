@@ -65,7 +65,7 @@ public class Main {
 ```
 
 
-when running this test I was able to achieve the output to the console of:
+when running this test one could achieve the output to the console of:
 
 ```
 
