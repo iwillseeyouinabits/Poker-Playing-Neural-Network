@@ -43,16 +43,20 @@ public class Learn {
 		net = new NeuralNetwork(weights, inputs);
 		double[] out = net.fire();
 
+		//logs the inputs
 		for (int i = 0; i < inputs.length; i++) {
 			System.out.print(inputs[i] + "   ");
 		}
+		//logs the guess of the neural network and the correct output
 		System.out.println("   #########");
 		for (int i = 0; i < out.length; i++) {
 			System.out.print(out[i] + "     " + rightOutput[i] + "      ");
 		}
 		System.out.println("   ????????????");
 
+		//updates each neuron in each layer from output to input
 		for (int x = weights.length - 1; x >= 0; x--) {
+			//calculates the total error of each neurons output in the neural network
 			errorNeurons[x] = new double[weights[x].length];
 			for (int y = 0; y < weights[x].length; y++) {
 				if (x == weights.length - 1) {
@@ -69,7 +73,7 @@ public class Learn {
 					errorNeurons[x][y] *= derivative(net.getLayers()[x].getNeurons()[y].getTotal());
 				}
 
-				// revises weights
+				// revises weights to allow for gradient disent
 				if (x != 0)
 					for (int z = 0; z < weights[x][y].length; z++) {
 						weights[x][y][z] -= learningRate * errorNeurons[x][y]
@@ -102,13 +106,16 @@ public class Learn {
 		boolean run = true;
 		int count = 0;
 		double[][][][] allW = new double[num][][][];
+		// trains num neural networks in this loop
 		for (int x = 0; x < num; x++) {
 			int subcount = 0;
+			// beings training of the x neural network
 			loop: while (count < it) {
+				//logs the error of the network
 				System.out.println((errornum / errorden) + "     " + x + "  !!!!!!!!!!!!!");
-				// System.out.println(" ");
 				double[][] data = testData(testData);
 				w = learn(weights, data[0], data[1]);
+				//updates the last recorded error rate every 300 training batches
 				if (errornum / errorden <= stop && subcount >= 300) {
 					errornum = 0;
 					errorden = 0;
@@ -119,6 +126,8 @@ public class Learn {
 					run = false;
 					System.out.println("fired");
 				}
+				//if the neural network has not improved its error ratio after 10000 training steps
+				//	it creates a new neural network to prevent a local minima from effecting the overal neural network
 				if (count % 10000 == 0) {
 					System.out.println("hi there");
 					if (prog < errornum / errorden) {
@@ -140,18 +149,36 @@ public class Learn {
 				subcount++;
 				count++;
 			}
+			// retrains new neural networks if the neural networks are not getting better over time
 			if (run) {
 				return learnRecur(randW(), it, stop, num, testData);
 			}
-
+			// writes the neural networks weights to a file to keep for running on other data after they have been trained
 			if (good) {
 				allW[x] = w;
 				weightsToFile(w, x);
 			}
 		}
+		// returns the bunch of trained neural network weights
 		return allW;
 	}
 
+	
+	/**
+	 * Corrects the weights in a neural network to better perform on a dataset
+	 * using large batches of training neural networks on the GPU with threading
+	 * 
+	 * @param w        - the weights that need to be optimized
+	 * @param it       - the number of samples for the neural network to practice
+	 *                 gradient decent on
+	 * @param batch       - the size of the batch of neural networks to train on one thread
+	 * @param stop     - the error ratio that would be enough for the network to
+	 *                 stop training
+	 * @param num      - the number of networks to train
+	 * @param testData - a list of lists of input and corresponding output data
+	 * @return - a list of weights optimized to better perform in the dataset;
+	 * @throws IOException
+	 */
 	public double[][][][] learnRecurGPU(double[][][] w, int it, int batch, double stop, int num, double[][][] testData)
 			throws IOException {
 		boolean run = true;
@@ -285,6 +312,10 @@ public class Learn {
 		return w;
 	}
 
+	
+	/**
+		outputs the weights of a neural network to a file to be stored and potentially used by another program.
+	*/
 	public void weightsToFile(double[][][] w, int x) throws IOException {
 		BufferedWriter bw = new BufferedWriter(new FileWriter("weights V" + Integer.toString(x) + ".txt"));
 		double[][][] matrix = w;
