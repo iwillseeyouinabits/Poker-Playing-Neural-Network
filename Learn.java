@@ -267,7 +267,7 @@ public class Learn {
 	 * @return
 	 */
 	public double derivative(double x) {
-		return (Math.pow(Math.E, x)) / Math.pow(1.0 + Math.pow(Math.E, x), 2);
+		return Math.cos(x);
 	}
 
 	/**

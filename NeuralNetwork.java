@@ -206,6 +206,50 @@ public class NeuralNetwork {
 		
 		return w;
 	}
+
+	
+	/**
+	 * takes a string storing weights of a neural network in it and returns the neural networks weights
+	 * 
+	 * @return -  the neural networks weights that were stored in a string
+	 */
+	public double[][][] stringToWeights(String str) throws FileNotFoundException{
+		double[][][] w;
+		ArrayList<ArrayList<ArrayList<Double>>> tempW = new ArrayList<ArrayList<ArrayList<Double>>>();
+		tempW.add(new ArrayList< ArrayList<Double>>());
+		tempW.get(0).add(new ArrayList<Double>());
+		int x = 0;
+		int y = 0;
+		Scanner sc = new Scanner(str);
+		while(sc.hasNext()){
+			String curentS = sc.next();
+			if(curentS.equals("?")){
+				tempW.add(new ArrayList< ArrayList<Double>>());
+				y = 0;
+				x++;	
+				tempW.get(x).add(new ArrayList<Double>());
+			}else if(curentS.equals("*")){
+				tempW.get(x).add(new ArrayList<Double>());
+				y++;
+			}else{
+				double curentD = Double.parseDouble(curentS);
+				tempW.get(x).get(y).add(curentD);
+			}
+		}
+		
+		w = new double[tempW.size()][][];
+		for(int i = 0; i < tempW.size(); i++){
+			w[i] = new double[tempW.get(i).size()][];
+			for(int j = 0; j < tempW.get(i).size(); j++){
+				w[i][j] = new double[tempW.get(i).get(j).size()];
+				for(int k = 0; k < tempW.get(i).get(j).size(); k++){
+					w[i][j][k] = tempW.get(i).get(j).get(k);
+				}
+			}
+		}
+		
+		return w;
+	}
 	
 	
 	

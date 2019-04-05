@@ -30,6 +30,11 @@ public class GUI extends JFrame implements ActionListener {
 	double[][][] brain = null;
 	double gameCount = 1;
 
+	/**
+	 * allows for a poker AI to be run in the real world
+	 * @param brain - the weights of the neural network of the poker AI that should be run in the real world
+	 * @param bankRole - the bankRole of the current playing poker players
+	 */
 	public void gui(double[][][] brain, double[] bankRole) {
 		this.bankRole = bankRole;
 		this.brain = brain;
@@ -93,6 +98,9 @@ public class GUI extends JFrame implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * logs all of the players moves and allows for the poker AI to make its own moves
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cardNum = e.getActionCommand();

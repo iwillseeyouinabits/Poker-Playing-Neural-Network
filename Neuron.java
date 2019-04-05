@@ -45,7 +45,7 @@ public class Neuron {
 	 * @return - the squashed total
 	 */
 	public double squash(double total) {
-		return (1.0/(1.0 + Math.pow(Math.E, -total)));	
+		return Math.sin(total);
 	}
 
 	
