@@ -4,7 +4,7 @@ Poker Playing Neural Network is for people to understand how an all Java impleme
 
 ## How To Use This Code
 
-Copy the Java files into an IDE or text Editor if you wish to train your own poker bot and modify the code for yourself. Download the Jar file if you wish to play with a pre-trained poker bot that has seen more poker hands than nierly any human.
+Copy the Java files into an IDE or text Editor if you wish to train your own poker bot and modify the code for yourself. Download the Jar file if you wish to play with a pre-trained poker bot that has seen more poker hands than nearly any human.
 
 ### Prerequisites
 
